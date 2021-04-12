@@ -1,12 +1,10 @@
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
 import os
 import glob
 import linecache
-import numpy as np
+from numpy import array
 import math
 import pandas as pd
 
@@ -227,30 +225,30 @@ class Ui_MainWindow(object):
             scale = linecache.getline(self.files[i], last_line)
             scale = scale.split("=")
             scale = scale[1].rstrip("\n")
-            scale = np.array(scale, dtype = float)
+            scale = array(scale, dtype = float)
 
             # load landmarks
             target_lm = linecache.getline(self.files[i], last_line-8)
             lm_values = [float(n) for n in target_lm.split()]
-            LM1 = np.array([lm_values[0], lm_values[1]], dtype = float)
+            LM1 = array([lm_values[0], lm_values[1]], dtype = float)
             target_lm = linecache.getline(self.files[i], last_line-7)
             lm_values = [float(n) for n in target_lm.split()]
-            LM2 = np.array([lm_values[0], lm_values[1]], dtype = float)
+            LM2 = array([lm_values[0], lm_values[1]], dtype = float)
             target_lm = linecache.getline(self.files[i], last_line-6)
             lm_values = [float(n) for n in target_lm.split()]
-            LM3 = np.array([lm_values[0], lm_values[1]], dtype = float)
+            LM3 = array([lm_values[0], lm_values[1]], dtype = float)
             target_lm = linecache.getline(self.files[i], last_line-5)
             lm_values = [float(n) for n in target_lm.split()]
-            LM4 = np.array([lm_values[0], lm_values[1]], dtype = float)
+            LM4 = array([lm_values[0], lm_values[1]], dtype = float)
             target_lm = linecache.getline(self.files[i], last_line-4)
             lm_values = [float(n) for n in target_lm.split()]
-            LM5 = np.array([lm_values[0], lm_values[1]], dtype = float)
+            LM5 = array([lm_values[0], lm_values[1]], dtype = float)
             target_lm = linecache.getline(self.files[i], last_line-3)
             lm_values = [float(n) for n in target_lm.split()]
-            LM6 = np.array([lm_values[0], lm_values[1]], dtype = float)
+            LM6 = array([lm_values[0], lm_values[1]], dtype = float)
             target_lm = linecache.getline(self.files[i], last_line-2)
             lm_values = [float(n) for n in target_lm.split()]
-            LM7 = np.array([lm_values[0], lm_values[1]], dtype = float)
+            LM7 = array([lm_values[0], lm_values[1]], dtype = float)
 
             LM1 = LM1 * scale
             LM2 = LM2 * scale
