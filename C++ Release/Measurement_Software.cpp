@@ -18,7 +18,7 @@ Measurement_Software::Measurement_Software(QWidget *parent)
 
 void Measurement_Software::on_btn_load_clicked()
 {
-    QString directory = QFileDialog::getExistingDirectory(this, "Open Directory", "C:/Users/Lloyd/Desktop",
+    QString directory = QFileDialog::getExistingDirectory(this, "Open Directory", "C:/",
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
     std::string str_dir = directory.toStdString();
