@@ -20,7 +20,7 @@ std::vector<std::string> split(const std::string str, const std::string& delim) 
 		prev = pos + delim.length();
 	} while (pos < str.length() && prev < str.length());
 	return tokens;
-};
+};  // Función de Alberto Morcillo Sanz https://github.com/MorcilloSanz
 
 double Landmark::scale = 0.0; // initiate static scale variable in class landmark
 
