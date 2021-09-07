@@ -112,7 +112,7 @@ void Measurement_Software::on_btn_compute_clicked()
         std::string* pt_names = &names;
 
         this->output_results = "[individuals]\n" + std::to_string(dir.count()) + "\n" +
-            "[landmarks]\n7\n[dimesnions]\n2\n[names]\n";
+            "[landmarks]\n7\n[dimensions]\n2\n[names]\n";
 
         for (QFileInfo var : dir.entryInfoList()) {
 
