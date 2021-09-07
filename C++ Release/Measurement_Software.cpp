@@ -8,57 +8,150 @@
 #include <fstream>
 #include <string>
 #include <qdebug.h>
+#include "Morphologika.h"
+#include "Measurements.h"
 
 Measurement_Software::Measurement_Software(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+    ui.btn_compute->setEnabled(false);
+    ui.btn_save->setEnabled(false);
 
 }
 
 void Measurement_Software::on_btn_load_clicked()
 {
-    QString directory = QFileDialog::getExistingDirectory(this, "Open Directory", "C:/",
+    this->directory = QFileDialog::getExistingDirectory(this, "Open Directory", "C:/",
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
-    std::string str_dir = directory.toStdString();
+    this->str_dir = directory.toStdString();
 
-    QStringList filters;
-    filters << "*.tps";
+    this->filters << "*.tps";
 
-    std::string output_results = "File_Name,WIS,WIM,WIB,LDC,RDC,OA,D";
-
-    QDir dir(directory);
-    dir.setNameFilters(filters);
+    QDir dir(this->directory);
+    dir.setNameFilters(this->filters);
 
     bool empty_result = dir.isEmpty();
     if (empty_result == true) {
+        ui.btn_compute->setEnabled(false);
+        ui.btn_save->setEnabled(false);
+        ui.textEdit->setText("");
         QMessageBox::warning(this, "..", "Selected directory has no .tps files to process.");
         return;
     }
+    else {
+        ui.btn_compute->setEnabled(true);
+    }
 
-    for (QFileInfo var : dir.entryInfoList()) {
+    std::string message_information = std::to_string(dir.count()) + " .tps files found in the selected folder: " + str_dir;
 
-        std::string file_name = var.fileName().toStdString();
-        std::string full_path = str_dir + "/" + file_name;
+    QMessageBox::information(this, "..", QString::fromStdString(message_information));  
 
-        std::ifstream infile;
-        infile.open(full_path);
+}
 
-        if (infile.fail()) {
-            QMessageBox::warning(this, "..", "Error in opening file");
-            exit(1);
+void Measurement_Software::on_btn_compute_clicked()
+{
+
+    ui.textEdit->setText("");
+
+    QDir dir(this->directory);
+    dir.setNameFilters(this->filters);
+
+    QString extract_label = ui.lbl_sample->text();
+    std::string lb = extract_label.toStdString();
+
+    check_label(&lb);
+
+    this->sample_label = lb;
+
+    if (ui.rbtn_meas->isChecked()) {
+
+        if (this->sample_label == "") {
+            this->output_results = "File_Name,WIS,WIM,WIB,LDC,RDC,OA,D";
+        }
+        else {
+            this->output_results = "File_Name,Sample,WIS,WIM,WIB,LDC,RDC,OA,D";
         }
 
-        std::string results = read_measurements(infile, file_name);
-        output_results = output_results + "\n" + results;
+        for (QFileInfo var : dir.entryInfoList()) {
 
-        infile.close();
+            std::string file_name = var.fileName().toStdString();
+            std::string full_path = this->str_dir + "/" + file_name;
+
+            std::ifstream infile;
+            infile.open(full_path);
+
+            if (infile.fail()) {
+                QMessageBox::warning(this, "..", "Error in opening file");
+                exit(1);
+            }
+
+            bool c_delim;
+            if (ui.rbtn_comma->isChecked()) {
+                c_delim = true;
+            }
+            else {
+                c_delim = false;
+            }
+
+            std::string results = read_measurements(infile, file_name, &c_delim, this->sample_label);
+            this->output_results = this->output_results + "\n" + results;
+
+            infile.close();
+
+        }
+    }
+    else {
+
+        std::string landmarks;
+        std::string* pt_landmarks = &landmarks;
+        std::string lb_sample;
+        std::string* pt_sample = &lb_sample;
+        std::string names;
+        std::string* pt_names = &names;
+
+        this->output_results = "[individuals]\n" + std::to_string(dir.count()) + "\n" +
+            "[landmarks]\n7\n[dimesnions]\n2\n[names]\n";
+
+        for (QFileInfo var : dir.entryInfoList()) {
+
+            std::string file_name = var.fileName().toStdString();
+            std::string full_path = this->str_dir + "/" + file_name;
+
+            std::ifstream infile;
+            infile.open(full_path);
+
+            if (infile.fail()) {
+                QMessageBox::warning(this, "..", "Error in opening file");
+                exit(1);
+            }
+
+            morph_individual_string(infile, &file_name, pt_landmarks);
+            morph_sample_string(this->sample_label, pt_sample);
+            morph_names_string(file_name, pt_names);
+
+            infile.close();
+
+        }
+
+        this->output_results = this->output_results + *pt_names;
+
+        if (this->sample_label != "") {
+            this->output_results = this->output_results + "[labels]\nSample\n[labelvalues]\n" + *pt_sample;
+        }
+        
+        this->output_results = this->output_results + "[rawpoints]\n" + *pt_landmarks;
+        this->output_results.resize(this->output_results.size() - 2);
+
+        //QMessageBox::information(this, "..", "Morphologika feature coming soon...");
+        //this->output_results = "Morphologika feature currently unavailable...";
 
     }
 
-    ui.textEdit->setText(QString::fromStdString(output_results));
-    
+    ui.textEdit->setText(QString::fromStdString(this->output_results));
+
+    ui.btn_save->setEnabled(true);
 }
 
 void Measurement_Software::on_btn_save_clicked()
@@ -69,11 +162,28 @@ void Measurement_Software::on_btn_save_clicked()
 
     QString saveFileName = QFileDialog::getSaveFileName(this, "Save as:");
     std::string str_saveFileName = saveFileName.toStdString();
-    str_saveFileName = str_saveFileName + ".csv";
+
+    if (ui.rbtn_meas->isChecked()) {
+        std::string real_extension = str_saveFileName;
+        real_extension.erase(0, real_extension.length() - 4);
+        if (real_extension != ".csv") {
+            str_saveFileName = str_saveFileName + ".csv";
+        }
+    }
+    else {
+        std::string real_extension = str_saveFileName;
+        real_extension.erase(0, real_extension.length() - 4);
+        if (real_extension != ".txt") {
+            str_saveFileName = str_saveFileName + ".txt";
+        }
+    }
 
     std::ofstream outfile;
     outfile.open(str_saveFileName);
     outfile << str_output_text;
+
+    std::string message_info = "Results saved to: " + str_saveFileName;
+    QMessageBox::information(this, "..", QString::fromStdString(message_info));
 
     outfile.close();
 }

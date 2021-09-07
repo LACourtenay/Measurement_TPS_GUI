@@ -46,6 +46,12 @@
     <ClCompile Include="File_Management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Morphologika.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Measurements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Landmark.h">
@@ -55,6 +61,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="File_Management.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Morphologika.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Measurements.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

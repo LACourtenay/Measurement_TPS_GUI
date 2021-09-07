@@ -2,4 +2,6 @@
 
 std::vector<std::string> split(const std::string str, const std::string& delim);
 
-std::string read_measurements(std::ifstream& infile, std::string file_name);
+void check_label(std::string* label);
+
+void lm_count_error(std::string* file_name);
