@@ -22,6 +22,9 @@ private slots:
     void on_btn_load_clicked();
     void on_btn_save_clicked();
     void on_btn_compute_clicked();
+    void on_rbtn_morph_clicked();
+    void on_rbtn_meas_clicked();
+    void on_actionAuthor_triggered();
 
 private:
     

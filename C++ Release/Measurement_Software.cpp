@@ -37,7 +37,7 @@ void Measurement_Software::on_btn_load_clicked()
         ui.btn_compute->setEnabled(false);
         ui.btn_save->setEnabled(false);
         ui.textEdit->setText("");
-        QMessageBox::warning(this, "..", "Selected directory has no .tps files to process.");
+        QMessageBox::warning(this, "Directory Warning", "Selected directory has no .tps files to process.");
         return;
     }
     else {
@@ -46,7 +46,7 @@ void Measurement_Software::on_btn_load_clicked()
 
     std::string message_information = std::to_string(dir.count()) + " .tps files found in the selected folder: " + str_dir;
 
-    QMessageBox::information(this, "..", QString::fromStdString(message_information));  
+    QMessageBox::information(this, "Selected Directory", QString::fromStdString(message_information));  
 
 }
 
@@ -83,7 +83,7 @@ void Measurement_Software::on_btn_compute_clicked()
             infile.open(full_path);
 
             if (infile.fail()) {
-                QMessageBox::warning(this, "..", "Error in opening file");
+                QMessageBox::warning(this, "Warning", "Error in opening file");
                 exit(1);
             }
 
@@ -123,7 +123,7 @@ void Measurement_Software::on_btn_compute_clicked()
             infile.open(full_path);
 
             if (infile.fail()) {
-                QMessageBox::warning(this, "..", "Error in opening file");
+                QMessageBox::warning(this, "Warning", "Error in opening file");
                 exit(1);
             }
 
@@ -160,7 +160,7 @@ void Measurement_Software::on_btn_save_clicked()
     output_text = ui.textEdit->toPlainText();
     std::string str_output_text = output_text.toStdString();
 
-    QString saveFileName = QFileDialog::getSaveFileName(this, "Save as:");
+    QString saveFileName = QFileDialog::getSaveFileName(this, "Save as...");
     std::string str_saveFileName = saveFileName.toStdString();
 
     if (ui.rbtn_meas->isChecked()) {
@@ -183,7 +183,29 @@ void Measurement_Software::on_btn_save_clicked()
     outfile << str_output_text;
 
     std::string message_info = "Results saved to: " + str_saveFileName;
-    QMessageBox::information(this, "..", QString::fromStdString(message_info));
+    QMessageBox::information(this, "File Saved Succesfully", QString::fromStdString(message_info));
 
     outfile.close();
+}
+
+void Measurement_Software::on_rbtn_morph_clicked()
+{
+    ui.rbtn_comma->setEnabled(false);
+    ui.rbtn_semi->setEnabled(false);
+}
+
+void Measurement_Software::on_rbtn_meas_clicked()
+{
+    ui.rbtn_comma->setEnabled(true);
+    ui.rbtn_semi->setEnabled(true);
+}
+
+void Measurement_Software::on_actionAuthor_triggered()
+{
+    QMessageBox::information(this, "Info",
+        tr("About the Author\n\n"
+            "The present application was designed and created by Lloyd A. Courtenay."
+            "\n(TIDOP Research Group, University of Salamanca) \nLast Update: 07/09/2021"
+            "\nIn case of issues contact ladc1995@gmail.com"
+            "\n\nAknowledgements:\nAlberto Morcillo Sanz (TIDOP Research Group)\nEsteban Ruiz de O\u00D1a Crespo (TIDOP Research Group)"));
 }
