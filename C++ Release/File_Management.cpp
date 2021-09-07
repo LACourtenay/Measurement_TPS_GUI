@@ -20,45 +20,60 @@ std::vector<std::string> split(const std::string str, const std::string& delim) 
 		prev = pos + delim.length();
 	} while (pos < str.length() && prev < str.length());
 	return tokens;
-};
+}; // Función de Alberto Morcillo Sanz https://github.com/MorcilloSanz
 
 double Landmark::scale = 0.0; // initiate static scale variable in class landmark
+
+void lm_count_error(std::string* file_name) { // is the pointer the right size?
+	std::string warning_message;
+	warning_message = "Incorrect number of landmarks in file: " + *file_name;
+	QMessageBox::warning(NULL, "Warning", QString::fromStdString(warning_message));
+	exit(1);
+}
 
 std::string read_measurements(std::ifstream& infile, std::string file_name) {
 	if (infile.is_open()) {
 
-		int index = 0;
-		int count = 0;
-		int lm_number = 0;
-		int semi_number = 0;
+		int index = 0; // to control line number
+		int count = 0; // to control the number of landmarks
+		int lm_number = 0; // to find the number of landmarks in the file
+		int semi_number = 0; // number of semi-landmarks in the case of not using fixed landmarks
+		int patch_count = 0; // check the count of semi-landmarks is correct
+		std::string patch_value;
 		std::string image_name;
 		std::vector<Landmark> landmarks;
 
 		std::string line;
 		while (std::getline(infile, line)) {
 			if (index == 0) {
+				
 				//qDebug() << QString::fromStdString(line);
+				
 				lm_number = std::atoi(split(line, "LM=")[0].c_str());
 				if ((lm_number != 7) && (lm_number != 0)) {
+					
 					//throw std::exception("Incorrect number of landmarks"); // for debugging
-					std::string warning_message;
-					warning_message = "Incorrect number of landmarks in file: " + file_name;
-					QMessageBox::warning(NULL, "Warning", QString::fromStdString(warning_message));
-					exit(1);
+					
+					lm_count_error(&file_name);
+					
 				}
 			}
 			else {
 				if (lm_number == 7) {
 					if (count < lm_number) {
+
 						std::vector<std::string> splitted = split(line, " ");
 						double first = static_cast<double>(std::atof(splitted[0].c_str()));
 						double second = static_cast<double>(std::atof(splitted[1].c_str()));
 						landmarks.push_back(Landmark(first, second));
+						
 						//qDebug() << QString::fromStdString("First: " + std::to_string(first) + "Second: " + std::to_string(second));
 					}
 					else {
 						if (line.rfind("IMAGE=", 0) == 0) {
+							
 							image_name = split(line, "IMAGE=")[0];
+							
 							//qDebug() << QString::fromStdString(image_name);
 						}
 					}
@@ -73,13 +88,30 @@ std::string read_measurements(std::ifstream& infile, std::string file_name) {
 							double first = static_cast<double>(std::atof(splitted[0].c_str()));
 							double second = static_cast<double>(std::atof(splitted[1].c_str()));
 							landmarks.push_back(Landmark(first, second));
+							
 							//qDebug() << QString::fromStdString("First: " + std::to_string(first) + "Second: " + std::to_string(second));
 
 							count++;
 						}
+						else if (line.rfind("POINTS=", 0) == 0) {
+							patch_value = split(line, "POINTS=")[0];
+							patch_count = std::stoi(patch_value);
+							if (patch_count > semi_number) {
+
+								lm_count_error(&file_name);
+
+							}
+						}
+					}
+					if (patch_count < semi_number) {
+
+						lm_count_error(&file_name);
+
 					}
 					if (line.rfind("IMAGE=", 0) == 0) {
+						
 						image_name = split(line, "IMAGE=")[0];
+						
 						//qDebug() << QString::fromStdString(image_name);
 					}
 				}
@@ -95,7 +127,9 @@ std::string read_measurements(std::ifstream& infile, std::string file_name) {
 		}
 
 		double scale = static_cast<double>(std::atof(split(line, "SCALE=")[0].c_str()));
+		
 		//qDebug() << QString::fromStdString(std::to_string(scale));
+		
 		Landmark::scale = scale;
 
 		Landmark LM1 = landmarks[0];
