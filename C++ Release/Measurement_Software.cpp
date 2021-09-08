@@ -67,11 +67,22 @@ void Measurement_Software::on_btn_compute_clicked()
 
     if (ui.rbtn_meas->isChecked()) {
 
-        if (this->sample_label == "") {
-            this->output_results = "File_Name,WIS,WIM,WIB,LDC,RDC,OA,D";
+        std::string delim;
+
+        if (ui.rbtn_comma->isChecked()) {
+            delim = ",";
         }
         else {
-            this->output_results = "File_Name,Sample,WIS,WIM,WIB,LDC,RDC,OA,D";
+            delim = ";";
+        }
+
+        if (this->sample_label == "") {
+            this->output_results = "File_Name" + delim + "WIS" + delim + "WIM" + delim + "WIB" + delim +
+                "LDC" + delim + "RDC" + delim + "OA" + delim + "D" + delim + "OA_lin";
+        }
+        else {
+            this->output_results = "File_Name" + delim + "Sample" + delim + "WIS" + delim + "WIM" + delim + "WIB" + delim +
+                "LDC" + delim + "RDC" + delim + "OA" + delim + "D" + delim + "OA_lin";
         }
 
         for (QFileInfo var : dir.entryInfoList()) {
@@ -87,15 +98,7 @@ void Measurement_Software::on_btn_compute_clicked()
                 exit(1);
             }
 
-            bool c_delim;
-            if (ui.rbtn_comma->isChecked()) {
-                c_delim = true;
-            }
-            else {
-                c_delim = false;
-            }
-
-            std::string results = read_measurements(infile, file_name, &c_delim, this->sample_label);
+            std::string results = read_measurements(infile, file_name, delim, this->sample_label);
             this->output_results = this->output_results + "\n" + results;
 
             infile.close();

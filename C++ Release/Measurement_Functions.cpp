@@ -36,3 +36,12 @@ double heron(double side_1, double side_2, double side_3) {
 double height(double base, double area) {
 	return (2.0 * area) / base;
 }
+
+// linear transformation of OA variable
+
+double circ_lin_transform(double OA) {
+	double theta = OA * PI / 180;
+	double cos_theta = cos(theta);
+	double sin_theta = sin(theta);
+	return cos_theta + sin_theta;
+}

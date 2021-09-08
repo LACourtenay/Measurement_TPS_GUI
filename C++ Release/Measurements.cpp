@@ -10,7 +10,7 @@
 #include <qdebug.h>
 #include <qdir.h>
 
-std::string read_measurements(std::ifstream& infile, std::string file_name, bool* c_delim, std::string lb_sample) {
+std::string read_measurements(std::ifstream& infile, std::string file_name, std::string delim, std::string lb_sample) {
 	if (infile.is_open()) {
 
 		int index = 0; // to control line number
@@ -124,7 +124,7 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, bool
 		LM6.ScaleCoords();
 		LM7.ScaleCoords();
 
-		double WIS, WIM, WIB, LDC, RDC, OA, D;
+		double WIS, WIM, WIB, LDC, RDC, OA, D, OA_lin;
 
 		WIS = euclid_distance(LM1.x, LM1.y, LM7.x, LM7.y);
 		WIM = euclid_distance(LM2.x, LM2.y, LM6.x, LM6.y);
@@ -133,10 +133,7 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, bool
 		RDC = euclid_distance(LM4.x, LM4.y, LM7.x, LM7.y);
 		OA = angle(LDC, RDC, WIS);
 		D = height(WIS, heron(LDC, RDC, WIS));
-
-		std::string delim;
-		if (*c_delim == true) delim = ",";
-		else delim = ";";
+		OA_lin = circ_lin_transform(OA);
 
 		std::string output;
 
@@ -144,7 +141,9 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, bool
 			output = image_name + delim + std::to_string(WIS) + delim + std::to_string(WIM) + delim + std::to_string(WIB) +
 				delim + std::to_string(LDC) + delim +
 				std::to_string(RDC) + delim +
-				std::to_string(OA) + delim + std::to_string(D);
+				std::to_string(OA) + delim +
+				std::to_string(D) + delim +
+				std::to_string(OA_lin);
 		}
 		else {
 			output = image_name + delim +
@@ -152,7 +151,8 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, bool
 				std::to_string(WIS) + delim + std::to_string(WIM) + delim + std::to_string(WIB) +
 				delim + std::to_string(LDC) + delim +
 				std::to_string(RDC) + delim +
-				std::to_string(OA) + delim + std::to_string(D);
+				std::to_string(OA) + delim + std::to_string(D) + delim +
+				std::to_string(OA_lin);
 		}
 
 

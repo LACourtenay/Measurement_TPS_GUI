@@ -9,3 +9,5 @@ double perimiter(double side_1, double side_2, double side_3);
 double heron(double side_1, double side_2, double side_3);
 
 double height(double base, double area);
+
+double circ_lin_transform(double OA);
