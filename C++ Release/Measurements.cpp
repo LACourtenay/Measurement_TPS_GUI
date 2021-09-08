@@ -22,6 +22,8 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 		std::string image_name;
 		std::vector<Landmark> landmarks;
 
+		double scale = 0;
+
 		std::string line;
 		while (std::getline(infile, line)) {
 			if (index == 0) {
@@ -52,6 +54,9 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 							image_name = split(line, "IMAGE=")[0];
 
 							//qDebug() << QString::fromStdString(image_name);
+						}
+						if (line.rfind("SCALE=", 0) == 0) {
+							scale = static_cast<double>(std::atof(split(line, "SCALE=")[0].c_str()));
 						}
 					}
 					count++;
@@ -86,6 +91,9 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 
 						//qDebug() << QString::fromStdString(image_name);
 					}
+					if (line.rfind("SCALE=", 0) == 0) {
+						scale = static_cast<double>(std::atof(split(line, "SCALE=")[0].c_str()));
+					}
 				}
 			}
 			index++;
@@ -95,14 +103,12 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 			lm_count_error(&file_name);
 
 		}
-		if (line.rfind("SCALE=", 0) != 0) {
+		if (scale == 0) {
 			std::string warning_message;
 			warning_message = "Scale is missing from file: " + file_name;
 			QMessageBox::warning(NULL, "Warning", QString::fromStdString(warning_message));
 			exit(1);
 		}
-
-		double scale = static_cast<double>(std::atof(split(line, "SCALE=")[0].c_str()));
 
 		//qDebug() << QString::fromStdString(std::to_string(scale));
 
