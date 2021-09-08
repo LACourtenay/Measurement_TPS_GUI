@@ -130,7 +130,7 @@ void Measurement_Software::on_btn_compute_clicked()
                 exit(1);
             }
 
-            morph_individual_string(infile, &file_name, pt_landmarks);
+            morph_individual_string(infile, file_name, pt_landmarks);
             morph_sample_string(this->sample_label, pt_sample);
             morph_names_string(file_name, pt_names);
 

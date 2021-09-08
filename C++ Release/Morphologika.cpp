@@ -123,12 +123,11 @@ std::string read_landmarks(std::ifstream& infile, std::string file_name)
 	}
 }
 
-void morph_individual_string(std::ifstream& infile, std::string* file_name,
+void morph_individual_string(std::ifstream& infile, std::string name,
 	std::string* pt_landmark)
 {
-	std::string name = *file_name;
 	name.resize(name.size() - 4);
-	std::string lm_from_file = read_landmarks(infile, *file_name);
+	std::string lm_from_file = read_landmarks(infile, name);
 	std::string lm_conj = "\u0027" + name + "\n" + lm_from_file + "\n\n";
 	*pt_landmark = *pt_landmark + lm_conj;
 }
