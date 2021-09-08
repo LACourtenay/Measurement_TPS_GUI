@@ -12,6 +12,8 @@ std::string read_landmarks(std::ifstream& infile, std::string file_name)
 {
 	if (infile.is_open()) {
 
+		std::string morph_landmarks;
+
 		int index = 0; // to control line number
 		int count = 0; // to control the number of landmarks
 		int lm_number = 0; // to find the number of landmarks in the file
@@ -87,6 +89,12 @@ std::string read_landmarks(std::ifstream& infile, std::string file_name)
 			lm_count_error(&file_name);
 
 		}
+		if (scale == 0) {
+			std::string warning_message;
+			warning_message = "Scale is missing from file: " + file_name + ".tps";
+			QMessageBox::warning(NULL, "Warning", QString::fromStdString(warning_message));
+			exit(1);
+		}
 
 		//qDebug() << QString::fromStdString(std::to_string(scale));
 
@@ -115,7 +123,7 @@ std::string read_landmarks(std::ifstream& infile, std::string file_name)
 		LM7.ScaleCoords();
 		std::string lm_7_txt = std::to_string(LM7.x) + ' ' + std::to_string(LM7.y);
 
-		std::string morph_landmarks = lm_1_txt + '\n' + lm_2_txt + '\n' +
+		morph_landmarks = lm_1_txt + '\n' + lm_2_txt + '\n' +
 			lm_3_txt + '\n' + lm_4_txt + '\n' + lm_5_txt + '\n' + lm_6_txt + '\n' + lm_7_txt;
 
 		return morph_landmarks;
