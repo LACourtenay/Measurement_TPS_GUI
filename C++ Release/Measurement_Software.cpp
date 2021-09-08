@@ -77,12 +77,12 @@ void Measurement_Software::on_btn_compute_clicked()
         }
 
         if (this->sample_label == "") {
-            this->output_results = "File_Name" + delim + "WIS" + delim + "WIM" + delim + "WIB" + delim +
-                "LDC" + delim + "RDC" + delim + "OA" + delim + "D" + delim + "OA_lin";
+            this->output_results = "File_Name" + delim + "Image_Name" + delim + "WIS" + delim + "WIM" + delim + "WIB" + delim +
+                "LDC" + delim + "RDC" + delim + "OA" + delim + "D" + delim + "OA_linear";
         }
         else {
-            this->output_results = "File_Name" + delim + "Sample" + delim + "WIS" + delim + "WIM" + delim + "WIB" + delim +
-                "LDC" + delim + "RDC" + delim + "OA" + delim + "D" + delim + "OA_lin";
+            this->output_results = "File_Name" + delim + "Image_Name" + delim + "Sample" + delim + "WIS" + delim + "WIM" + delim + "WIB" + delim +
+                "LDC" + delim + "RDC" + delim + "OA" + delim + "D" + delim + "OA_linear";
         }
 
         for (QFileInfo var : dir.entryInfoList()) {

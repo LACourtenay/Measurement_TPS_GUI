@@ -144,7 +144,9 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 		std::string output;
 
 		if (lb_sample == "") {
-			output = image_name + delim + std::to_string(WIS) + delim + std::to_string(WIM) + delim + std::to_string(WIB) +
+			std::string individual_name = file_name;
+			individual_name.resize(individual_name.size() - 4);
+			output = individual_name + delim + image_name + delim + std::to_string(WIS) + delim + std::to_string(WIM) + delim + std::to_string(WIB) +
 				delim + std::to_string(LDC) + delim +
 				std::to_string(RDC) + delim +
 				std::to_string(OA) + delim +
@@ -152,7 +154,9 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 				std::to_string(OA_lin);
 		}
 		else {
-			output = image_name + delim +
+			std::string individual_name = file_name;
+			individual_name.resize(individual_name.size() - 4);
+			output = individual_name + delim + image_name + delim +
 				lb_sample + delim +
 				std::to_string(WIS) + delim + std::to_string(WIM) + delim + std::to_string(WIB) +
 				delim + std::to_string(LDC) + delim +
@@ -160,8 +164,6 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 				std::to_string(OA) + delim + std::to_string(D) + delim +
 				std::to_string(OA_lin);
 		}
-
-
 
 		return output;
 	}
