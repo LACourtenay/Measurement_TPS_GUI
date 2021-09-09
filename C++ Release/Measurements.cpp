@@ -41,6 +41,8 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 				if (lm_number == 7) {
 					if (count < lm_number) {
 
+						check_decimal_char(&line, &file_name);
+
 						std::vector<std::string> splitted = split(line, " ");
 						double first = static_cast<double>(std::atof(splitted[0].c_str()));
 						double second = static_cast<double>(std::atof(splitted[1].c_str()));
@@ -65,6 +67,8 @@ std::string read_measurements(std::ifstream& infile, std::string file_name, std:
 					semi_number = 7;
 					if (count < semi_number) {
 						if ((line.rfind("CURVES=", 0) != 0) && (line.rfind("POINTS=", 0) != 0)) {
+
+							check_decimal_char(&line, &file_name);
 
 							std::vector<std::string> splitted = split(line, " ");
 							double first = static_cast<double>(std::atof(splitted[0].c_str()));

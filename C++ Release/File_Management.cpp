@@ -45,6 +45,26 @@ void check_label(std::string* label) {
 			*label = "INVALID_LABEL";
 		}
 	}
+}
+
+void check_decimal_char(std::string* target_text, std::string* file_name) {
 	
+	//int commas = (*target_text).rfind(",");
+	
+	bool invalid_string = false;
+	char comma = ',';
+	for (int i = 0; i < (*target_text).size(); i++) {
+		if ((*target_text)[i] == comma) {
+			invalid_string = true;
+			break;
+		}
+	}
+
+	if (invalid_string) {
+		std::string warning_message;
+		warning_message = "Incorrect number format in file: " + *file_name + "\n\nPlease check that decimals are seperated using a decimal point (.) and not commas (,).";
+		QMessageBox::warning(NULL, "Warning", QString::fromStdString(warning_message));
+		exit(1);
+	}
 }
 
