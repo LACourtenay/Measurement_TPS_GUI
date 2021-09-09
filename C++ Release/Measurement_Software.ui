@@ -41,6 +41,12 @@
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="cursor" stdset="0">
+         <cursorShape>IBeamCursor</cursorShape>
+        </property>
+        <property name="statusTip">
+         <string>File output...</string>
+        </property>
        </widget>
       </item>
       <item>
@@ -211,6 +217,9 @@
                <bold>false</bold>
               </font>
              </property>
+             <property name="statusTip">
+              <string>Sample label...</string>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -283,8 +292,14 @@
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
+          <property name="statusTip">
+           <string>Load Data... (Ctrl + L)</string>
+          </property>
           <property name="text">
            <string>Load Data</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+L</string>
           </property>
          </widget>
         </item>
@@ -306,8 +321,14 @@
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
+          <property name="statusTip">
+           <string>Compute Output (Enter/Return key)</string>
+          </property>
           <property name="text">
            <string>Compute</string>
+          </property>
+          <property name="shortcut">
+           <string>Return</string>
           </property>
          </widget>
         </item>
@@ -329,8 +350,14 @@
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
+          <property name="statusTip">
+           <string>Save Data... (Ctrl + S)</string>
+          </property>
           <property name="text">
            <string>Save Data</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+S</string>
           </property>
          </widget>
         </item>
@@ -382,6 +409,9 @@
   <action name="actionAuthor">
    <property name="text">
     <string>Author...</string>
+   </property>
+   <property name="statusTip">
+    <string>Author Information...</string>
    </property>
   </action>
  </widget>
