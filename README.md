@@ -36,6 +36,7 @@ This repository contains:
   * User Guide.pdf - A detailed description of the application and how to use it.
 * <b>C++ Source Code</b>
   * All C++ code used to create this application
+* <b>Some example *tps files for testing</b>
 
 ---------------------------------------------------------------------------------------------------
 
