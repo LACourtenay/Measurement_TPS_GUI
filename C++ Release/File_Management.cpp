@@ -32,15 +32,15 @@ void lm_count_error(std::string* file_name) { // is the pointer the right size?
 }
 
 void check_label(std::string* label) {
-	std::string test = *label;
+	//std::string test = *label;
 
-	if (test == "") {
+	if (*label == "") {
 		return;
 	}
 
 	char space = ' ';
-	for (int i = 0; i < test.size(); i++) {
-		if (test[i] == space) {
+	for (int i = 0; i < (*label).size(); i++) {
+		if ((*label)[i] == space) {
 			QMessageBox::warning(NULL, "Invalid Character!", "Sample labels should not cointain spaces! Use underscores '_' instead.");
 			*label = "INVALID_LABEL";
 		}
